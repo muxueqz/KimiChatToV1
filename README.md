@@ -30,7 +30,9 @@ bash start.sh
 
 ## curl
 
-```
+### 非流式
+
+```bash
 curl --location 'http://127.0.0.1:6008/v1/chat/completions' \
 --header 'Content-Type: application/json' \
 --header 'Authorization: Bearer refresh_token' \
@@ -39,13 +41,22 @@ curl --location 'http://127.0.0.1:6008/v1/chat/completions' \
 }'
 ```
 
+### 流式
+
+```bash
+curl --location 'http://127.0.0.1:6008/v1/chat/completions' \
+--header 'Content-Type: application/json' \
+--header 'Authorization: Bearer refresh_token' \
+--data '{
+  "stream": true
+  "messages": [{"role": "user", "content": "hi"}]
+}'
+```
+
 # 不足
 
-- 暂不支持上传文件（因为ChatGPT-Next-Web这类软件大多没有上传文件的位置），后续可能会补充。
+- 暂不支持长传文件（因为ChatGPT-Next-Web这类软件大多没有上传文件的位置），后续可能会补充。
 
 - 解析网址也是时灵时不灵，但是好在可以联网。
 - 由于从官网向后端的接口只支持role为user的message，所以很多面具实现起来有点复杂，切换多个面具有可能会不能重置会话，我暂时没找到好的解决办法。
 - 由于实际上是从官网请求，模型和参数似乎是写死的，暂不支持切换模型，以及调参。
-
-
-
