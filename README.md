@@ -1,4 +1,4 @@
-# 项目介绍
+# KimiChatToV1
 
 KimiChat网页端逆向`/v1/chat/completions`接口，参考了COW插件，支持流式和非流式请求，内置自刷新token，支持ChatGPT-Next-Web，AMA问天等，支持接入OneAPI。
 
@@ -6,7 +6,7 @@ KimiChat网页端逆向`/v1/chat/completions`接口，参考了COW插件，支�
 
 ## 直接部署
 
-> python版本需>3.6
+> python版本需>=3.6
 
 ### 克隆本仓库
 
@@ -64,3 +64,4 @@ curl --location 'http://127.0.0.1:6008/v1/chat/completions' \
 ## Star History
 
 [![Star History Chart](https://api.star-history.com/svg?repos=tianzhen889/KimiChatToV1.git&type=Date)](https://star-history.com/#tianzhen889/KimiChatToV1.git&Date)
+
