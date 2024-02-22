@@ -13,7 +13,7 @@ from flask import Flask, Response, stream_with_context, request, session, jsonif
 from flask_cors import CORS
 import requests
 import json
-from .kimi_token_manager import ensure_access_token, tokens, refresh_access_token
+from kimi_token_manager import ensure_access_token, tokens, refresh_access_token
 import yaml
 import re
 
