@@ -61,4 +61,6 @@ curl --location 'http://127.0.0.1:6008/v1/chat/completions' \
 - 由于从官网向后端的接口只支持role为user的message，所以很多面具实现起来有点复杂，切换多个面具有可能会不能重置会话，我暂时没找到好的解决办法。
 - 由于实际上是从官网请求，模型和参数似乎是写死的，暂不支持切换模型，以及调参。
 
-<iframe style="width:100%;height:auto;min-width:600px;min-height:400px;" src="https://star-history.com/embed?secret=Z2hwX0NjeXNDeXFsSkp5Q2ZBYWt2dUJtUkFRV0s0YzBPUzQ4dXBHOA==#tianzhen889/KimiChatToV1.git&Date" frameBorder="0"></iframe>
+## Star History
+
+[![Star History Chart](https://api.star-history.com/svg?repos=tianzhen889/KimiChatToV1.git&type=Date)](https://star-history.com/#tianzhen889/KimiChatToV1.git&Date)
