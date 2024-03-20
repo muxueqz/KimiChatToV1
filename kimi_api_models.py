@@ -1,12 +1,4 @@
 # coding=utf-8
-"""
-Author: chazzjimel
-Email: chazzjimel@gmail.com
-wechat：cheung-z-x
-
-Description:
-
-"""
 
 
 from flask import Flask, Response, stream_with_context, request, session, jsonify
