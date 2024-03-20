@@ -114,7 +114,7 @@ def stream_chat_responses_route():
     messages = request.json.get('messages', [])
     messages_number = len(messages)
     print(messages_number)
-    # 只有当 messages 列表中只有2个消息时，才创建一个新的会话 ID
+    # 只有当 messages 列表中消息数小于3时，才创建一个新的会话 ID
     if messages_number <= 3:
         chat_id = create_new_chat_session()
         save_chat_id(chat_id)  # 保存 chat_id 到 config.yaml 文件
