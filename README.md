@@ -1,6 +1,6 @@
 # KimiChatToV1
 
-KimiChat网页端逆向`/v1/chat/completions`接口，参考了COW插件，支持流式和非流式请求，内置自刷新token，支持ChatGPT-Next-Web，AMA问天等，支持接入OneAPI。
+KimiChat网页端逆向`/v1/chat/completions`接口，参考了COW插件，支持流式和非流式请求，内置自刷新token，支持ChatGPT-Next-Web，AMA问天等，``支持接入OneAPI。``
 
 # 部署方式
 
