@@ -48,7 +48,7 @@ curl --location 'http://127.0.0.1:6008/v1/chat/completions' \
 --header 'Content-Type: application/json' \
 --header 'Authorization: Bearer refresh_token' \
 --data '{
-  "stream": true
+  "stream": true,
   "messages": [{"role": "user", "content": "hi"}]
 }'
 ```
