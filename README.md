@@ -63,6 +63,5 @@ curl --location 'http://127.0.0.1:6008/v1/chat/completions' \
 
 ## Star History
 
-[![Star History Chart](https://api.star-history.com/svg?repos=tianzhen889/KimiChatToV1&type=Date)](https://star-history.com/#tianzhen889/KimiChatToV1)
-
+[![Star History Chart](https://api.star-history.com/svg?repos=tianzhen889/KimiChatToV1&type=Date)](https://star-history.com/#tianzhen889/KimiChatToV1&Date)
 
