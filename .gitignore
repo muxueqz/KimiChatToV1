@@ -2,3 +2,6 @@ __pycache__/*
 config.yaml
 venv/*
 .idea/*
+.vscode/*
+.venv/*
+
