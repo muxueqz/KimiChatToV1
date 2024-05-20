@@ -1,4 +1,3 @@
 PyYAML
-flask_cors
 requests
-flask
+bottle
