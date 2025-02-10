@@ -10,7 +10,6 @@ import yaml
 import re
 
 
-
 def save_chat_id(chat_id):
     # 读取现有的配置
     try:
@@ -50,8 +49,7 @@ HEADERS = {
     "Accept-Language": "zh-CN,zh-HK;q=0.9,zh;q=0.8",
     "Content-Type": "application/json; charset=UTF-8",
     "Origin": "https://kimi.moonshot.cn",
-    "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/119.0.0.0 "
-    "Safari/537.36",
+    "User-Agent": "Mozilla/5.0 (X11; Linux x86_64; rv:128.0) Gecko/20100101 Firefox/128.0",
 }
 
 
@@ -113,6 +111,7 @@ def stream_chat_responses_route():
     if refresh_access_token() == 500:
         return bottle.HTTPResponse({"error": "refresh_token is error"}, 500)
     messages = request.json.get("messages", [])
+    segment_id = request.json.get("segment_id", "")
     messages_number = len(messages)
     print(messages_number)
     # 只有当 messages 列表中消息数小于3时，才创建一个新的会话 ID
@@ -146,7 +145,7 @@ def stream_chat_responses_route():
         use_search = False
     else:
         # 否则，根据前端的设置来决定是否开启搜索功能
-        use_search = request.json.get("use_search", True)
+        use_search = request.json.get("use_search", False)
     refs_list = request.json.get("refs_list", [])
     # use_search = request.json.get('use_search', True)
     new_chat = request.json.get("new_chat", False)
@@ -156,7 +155,12 @@ def stream_chat_responses_route():
 
         def generate():
             for response_json in stream_chat_responses(
-                messages, chat_id, refs_list, use_search, new_chat
+                messages,
+                chat_id,
+                refs_list,
+                use_search,
+                new_chat,
+                segment_id=segment_id,
             ):
                 yield f"data: {json.dumps(response_json)}\n\n"
             yield "data: [DONE]\n\n"  # 在所有响应发送完毕后发送一个 "data: [DONE]" 消息
@@ -167,13 +171,19 @@ def stream_chat_responses_route():
             mimetype="text/event-stream",
         )
     else:  # 如果 stream 字段的值为 false 或不存在，创建一个非流式响应
+        segment_id = ""
         if messages_number == 3:  # 如果这是一个新的会话
             print("这是新会话")
             content = load_rename_text()  # 使用 rename_text 作为 content
         else:  # 如果这不是一个新的会话
             response_jsons = list(
                 stream_chat_responses(
-                    messages, chat_id, refs_list, use_search, new_chat
+                    messages,
+                    chat_id,
+                    refs_list,
+                    use_search,
+                    new_chat,
+                    segment_id=segment_id,
                 )
             )
             # print(response_jsons)
@@ -182,10 +192,17 @@ def stream_chat_responses_route():
                 response_json["choices"][0]["delta"]["content"]
                 for response_json in response_jsons
             )
+            if len(content) == 0:
+                s = scroll(chat_id)
+                try:
+                    segment_id = s.get("items", [])[0]["id"]
+                except:
+                    pass
             # content = content.replace(" ", "")  # 去除文本中的空格
 
         return json.dumps(
             {
+                "segment_id": segment_id,
                 "choices": [
                     {
                         "finish_reason": "stop",
@@ -227,7 +244,29 @@ def load_rename_text():
 
 
 @ensure_access_token
-def stream_chat_responses(messages, chat_id, refs_list, use_search, new_chat):
+def scroll(chat_id):
+    # 从全局tokens变量中获取access_token
+    auth_token = tokens["access_token"]
+
+    # 复制请求头并添加Authorization字段
+    headers = HEADERS.copy()
+    headers["Authorization"] = f"Bearer {auth_token}"
+
+    # 拼接url
+    api_url = f"https://kimi.moonshot.cn/api/chat/{chat_id}/segment/scroll"
+
+    # 定义请求的载荷
+    payload = {"last": 2}
+
+    # 以流的方式发起POST请求
+    with requests.post(api_url, json=payload, headers=headers) as response:
+        return response.json()
+
+
+@ensure_access_token
+def stream_chat_responses(
+    messages, chat_id, refs_list, use_search, new_chat, segment_id=""
+):
     # 从全局tokens变量中获取access_token
     auth_token = tokens["access_token"]
 
@@ -243,6 +282,7 @@ def stream_chat_responses(messages, chat_id, refs_list, use_search, new_chat):
         "messages": messages,
         "refs": refs_list,
         "use_search": use_search,
+        "segment_id": segment_id,
         # "temperature": 0.3,
     }
 
